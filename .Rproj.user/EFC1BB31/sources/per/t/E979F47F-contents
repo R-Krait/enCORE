@@ -1,0 +1,483 @@
+link_info_list <- link_info_list_f
+
+lld
+
+rm(tmp_gABC)
+rm(test_mx)
+rm(test_mx_base)
+rm(proj4)
+rm(link_adj)
+rm(promoters_info)
+rm(res)
+rm(network_link)
+
+gc()
+
+for(i in 1:length(link_info_list)) {
+  link_per_cluster <- link_info_list[[i]][["decomposed_components"]]
+  chr_info <- link_info_list[[i]][["changed_point"]]$chr[1]
+  
+  for(j in 1:length(link_per_cluster)) {
+    link_cl <- link_per_cluster[[j]]
+    link_cl$dist_diff <- c(0, diff(link_cl$midpoint))
+    idx_decomposed_point <- which(link_cl$dist_diff > 17500)
+    
+    if(length(idx_decomposed_point) == 0) {
+      component_updated <- rep(paste(chr_info, link_cl$component[1], 0, sep = "_"), nrow(link_cl))
+      link_cl$component_stitching <- component_updated
+    } else {
+      idx_decomposed_point <- c((idx_decomposed_point[1] - 1), diff(idx_decomposed_point), (nrow(link_cl) - idx_decomposed_point[length(idx_decomposed_point)] + 1))
+      
+      component_updated <- c()
+      for(k in 1:length(idx_decomposed_point)) {
+        tmp_decompose <- rep(paste(chr_info, link_cl$component[1], (k - 1), sep = "_"), idx_decomposed_point[k])
+        component_updated <- c(component_updated, tmp_decompose)
+      }
+      
+      link_cl$component_stitching <- component_updated
+    }
+    
+    link_per_cluster[[j]] <- link_cl
+  }
+  
+  link_per_cluster <- do.call(rbind, link_per_cluster)
+  
+  link_info_list[[i]] <- link_per_cluster
+  
+  print(i)
+}
+
+calculate_centroid_remerge <- function(env_T, x, chr_info) {
+  x <- env_T$peak_id[env_T$component_stitching == x]
+  x <- results_gABC_list[[chr_info]][x]
+  x <- do.call(cbind, x)
+  
+  x <- rowSums(x)
+  
+  return(x)
+}
+
+remerge_component <- function(env_T, chr_info, idx_loop) {
+  list_comp <- env_T$component_stitching[!duplicated(env_T$component_stitching)]
+  
+  if(length(list_comp) == 1) {
+    env_T <- env_T
+  } else {
+    test_list <- rep(0, length(list_comp))
+    
+    for(i in 1:(length(list_comp) - 1)) {
+      test_comp_0 <- list_comp[i]
+      test_comp_1 <- list_comp[(i + 1)]
+      
+      cent_0 <- calculate_centroid_remerge(env_T, test_comp_0, chr_info)
+      cent_1 <- calculate_centroid_remerge(env_T, test_comp_1, chr_info)
+      
+      metric_cosine <- lsa::cosine(cent_0, cent_1)
+      
+      if(metric_cosine >= 0.92) {
+        next
+      }
+      
+      test_list[(i + 1)] <- 1
+    }
+    
+    idx_cliff <- which(test_list == 1)
+    
+    if(length(idx_cliff) == 0) {
+      if(sum(test_list) == 0) {
+        prefix <- stringr::str_split(list_comp[1], pattern = "_")
+        prefix <- do.call(rbind, prefix)
+        prefix <- prefix[1, c(1:(length(prefix[1, ]) - 1))]
+        prefix <- paste(prefix, collapse = "_")
+        
+        tmp_test <- rep(paste0(prefix, "_", 0), nrow(env_T))
+        env_T$component_stitching <- tmp_test
+      } else {
+        env_T <- env_T
+      }
+    } else {
+      idx_cliff <- c(idx_cliff[1] - 1, diff(idx_cliff), (length(test_list) - idx_cliff[length(idx_cliff)] + 1))
+      
+      list_comp_u <- c()
+      prefix <- stringr::str_split(list_comp[1], pattern = "_")
+      prefix <- do.call(rbind, prefix)
+      prefix <- prefix[1, c(1:(length(prefix[1, ]) - 1))]
+      prefix <- paste(prefix, collapse = "_")
+      
+      for(j in 1:length(idx_cliff)) {
+        tmp_test <- rep(paste0(prefix, "_", (j - 1)), idx_cliff[j])
+        list_comp_u <- c(list_comp_u, tmp_test)
+      }
+      
+      names(list_comp_u) <- list_comp
+      
+      for(k in 1:nrow(env_T)) {
+        env_T$component_stitching[k] <- as.character(list_comp_u[env_T$component_stitching[k]])
+      }
+    }
+  }
+  
+  return(env_T)
+}
+
+for(i in 1:length(link_info_list)) {
+  chr_info <- names(link_info_list)[i]
+  
+  test_env <- link_info_list[[chr_info]]
+  test_env$midpoint <- as.numeric(test_env$midpoint)
+  test_env <- test_env %>% dplyr::arrange(midpoint)
+  test_env <- split(test_env, f = test_env$component)
+  
+  test_env <- lapply(test_env, remerge_component, chr_info = chr_info, idx_loop = idx_loop)
+  test_env <- do.call(rbind, test_env)
+  link_info_list[[i]] <- test_env
+  
+  print(chr_info)
+}
+
+link_info_list <- do.call(rbind, link_info_list)
+
+link_info_list$topic <- peak_for_gABC[link_info_list$peak_id, "CRC"]
+rownames(link_info_list) <- link_info_list$peak_id
+
+#activity_test_info <- data.frame(peak_id = link_info_list$peak_id, comp_s = link_info_list$component_stitching, 
+                                 #activity = link_info_list$topic)
+
+network_reg <- link_info_f[, c("query_id", "subject_id", "queryHits", "subjectHits")]
+network_reg <- subset(network_reg, subset = ((query_id %in% link_info_list$peak_id) & (subject_id %in% link_info_list$peak_id)))
+
+# distance
+data_coacc <- as.data.frame(cA@listData)
+network_reg <- left_join(network_reg, data_coacc, by = c("queryHits", "subjectHits"))
+
+network_reg <- network_reg[, c("query_id", "subject_id", "correlation")]
+network_reg$correlation <- as.numeric(network_reg$correlation)
+
+peak_for_nreg <- peak_for_gABC[, c(4:(length(colnames(peak_for_gABC))))]
+idx_cts <- which(colnames(peak_for_nreg) == "CRC")
+
+options(digits=22)
+
+network_reg_1 <- network_reg[!(is.na(network_reg$correlation)), ]
+network_reg_1 <- network_reg_1[, c(2, 1, 3)]
+colnames(network_reg_1) <- c("query_id", "subject_id", "correlation")
+
+network_reg <- rbind(network_reg, network_reg_1)
+
+#tmp <- link_info_list
+#tmp <- tmp %>% dplyr::arrange(desc(topic_updated))
+#tmp <- tmp[25001:nrow(tmp), ]
+#tmp <- tmp$peak_id
+for(i in 1:nrow(network_reg)) {
+  if(is.na(network_reg$correlation[i]) == TRUE) {
+    next
+  }
+  
+  comp_0 <- link_info_list[network_reg$query_id[i], "component_stitching"]
+  comp_1 <- link_info_list[network_reg$subject_id[i], "component_stitching"]
+  
+  tmp_weight_0 <- as.numeric(peak_for_nreg[network_reg$query_id[i], "CRC"])
+  tmp_weight_1 <- as.numeric(peak_for_nreg[network_reg$subject_id[i], "CRC"])
+  
+  #tmp_z_score_0 <- as.numeric(peak_for_nreg[network_reg$query_id[i], ])
+  #tmp_z_score_1 <- as.numeric(peak_for_nreg[network_reg$subject_id[i], ])
+  #tmp_z_score <- tmp_z_score_0 * tmp_z_score_1
+  #tmp_z_score <- scale(tmp_z_score)
+  #tmp_z_score <- as.numeric(tmp_z_score[idx_cts, 1])
+  
+  #tmp_weight_0 <- as.numeric(link_info_list$topic_updated[which(link_info_list$peak_id == network_reg$query_id[i])])
+  #tmp_weight_1 <- as.numeric(link_info_list$topic_updated[which(link_info_list$peak_id == network_reg$subject_id[i])])
+  
+  tmp_weight_r0 <- sum(as.numeric(link_info_list$topic[which(link_info_list$component_stitching == comp_0)]))
+  tmp_weight_r1 <- sum(as.numeric(link_info_list$topic[which(link_info_list$component_stitching == comp_1)]))
+  
+  #tmp_weight_r0 <- as.numeric(peak_for_nreg[network_reg$query_id[i], "CD14_Mono"])
+  #tmp_weight_r1 <- as.numeric(peak_for_nreg[network_reg$subject_id[i], "CD14_Mono"])
+  
+  tmp_reg_0 <- stringr::str_split(network_reg$query_id[i], pattern = "_")
+  tmp_reg_1 <- stringr::str_split(network_reg$subject_id[i], pattern = "_")
+  tmp_reg_0 <- do.call(rbind, tmp_reg_0)
+  tmp_reg_1 <- do.call(rbind, tmp_reg_1)
+  
+  distance_bw <- abs(as.numeric(tmp_reg_0[1, 2]) - as.numeric(tmp_reg_1[1, 2]))
+  
+  tmp_weight_0 <- (tmp_weight_0 * tmp_weight_1 * tmp_weight_r1) / (tmp_weight_r0 + tmp_weight_r1)
+  
+  #if((network_reg$query_id[i] %in% tmp) | (network_reg$subject_id[i] %in% tmp)) {
+    #network_reg$correlation[i] <- 0
+  #} else {
+    #network_reg$correlation[i] <- network_reg$correlation[i] * tmp_weight_0 / distance_bw
+  #}
+  
+  network_reg$correlation[i] <- network_reg$correlation[i] * tmp_weight_0 / distance_bw
+  
+  print(i)
+}
+
+network_reg[is.na(network_reg$correlation), "correlation"] <- 1
+colnames(network_reg) <- c("query_id", "subject_id", "weight")
+
+network_reg <- igraph::graph.data.frame(network_reg, directed = TRUE)
+network_reg <- igraph::simplify(network_reg)
+
+rm(peak_for_gABC)
+gc()
+
+# method improvement
+# motif and chromVAR weight inspired by the paper from genome research
+
+load("~/PSJ/test_PoiSE_CRC/workspace_20241203.RData")
+
+library(motifmatchr)
+library(chromVARmotifs)
+
+data("human_pwms_v2")
+
+library(BSgenome.Hsapiens.UCSC.hg38)
+proj6 <- addMotifAnnotations(ArchRProj = proj5, motifPWMs = human_pwms_v2, name = "Motif")
+proj6 <- addBgdPeaks(proj6)
+proj6 <- addDeviationsMatrix(
+  ArchRProj = proj6, 
+  peakAnnotation = "Motif", 
+  force = TRUE, 
+  threads = 4
+)
+plotVarDev <- getVarDeviations(proj6, name = "MotifMatrix", plot = TRUE)
+plotVarDev
+plotPDF(plotVarDev, name = "Variable-Motif-Deviation-Scores", width = 5, height = 5, ArchRProj = proj6, addDOC = FALSE)
+
+saveArchRProject(ArchRProj = proj6, outputDirectory = "Save-Proj_r6", load = FALSE)
+
+weight_motifs <- getMatrixFromProject(
+  ArchRProj = proj6,
+  useMatrix = "MotifMatrix",
+  useSeqnames = NULL,
+  verbose = TRUE,
+  binarize = FALSE,
+  threads = getArchRThreads(),
+  logFile = createLogFile("getMatrixFromProject")
+)
+
+group_info <- weight_motifs$Clusters2
+group_info <- which(group_info == "CRC")
+weight_motifs <- weight_motifs@assays@data$z
+weight_motifs <- weight_motifs[, group_info]
+
+weight_motifs <- as.matrix(weight_motifs)
+#weight_motifs <- rowMeans(weight_motifs)
+#tmp_row_id <- names(weight_motifs)
+tmp_row_id <- rownames(weight_motifs)
+weight_motifs <- rowMedians(weight_motifs)
+
+motif_row_name <- c()
+for(i in tmp_row_id) {
+  motif_row_name <- c(motif_row_name, human_pwms_v2@listData[[i]]@name)
+  
+  print(i)
+}
+
+names(weight_motifs) <- motif_row_name
+
+hist(weight_motifs)
+plot(1:length(weight_motifs), sort(weight_motifs))
+
+getGroupBW(
+  ArchRProj = proj5,
+  groupBy = "Clusters2",
+  normMethod = "nFrags",
+  tileSize = 100,
+  maxCells = 3000,
+  ceiling = 4,
+  verbose = TRUE,
+  threads = getArchRThreads(),
+  logFile = createLogFile("getGroupBW")
+)
+
+# negative to zero
+# 25% : 0.675
+# 20% : 0.845
+# 10% : 1.25
+weight_motifs[weight_motifs < 0.675] <- 0
+#weight_motifs[weight_motifs < 0.525] <- 0
+
+hist(weight_motifs)
+plot(1:length(weight_motifs), sort(weight_motifs))
+
+#test_weight <- scales::rescale(weight_motifs, to = c(0, 1))
+#names(test_weight) <- names(weight_motifs)
+#plot(1:length(test_weight), sort(test_weight))
+
+test_weight <- weight_motifs
+#test_weight[test_weight != 0] <- 1
+#plot(1:length(test_weight), sort(test_weight))
+
+peaks_for_link <- makeGRangesFromDataFrame(link_info_list[, c("chr", "start", "end")])
+results_motifmatchr <- matchMotifs(human_pwms_v2, peaks_for_link, genome = "hg38", bg = "genome", out = "scores")
+results_motifmatchr <- motifMatches(results_motifmatchr)
+results_motifmatchr <- as.matrix(results_motifmatchr)
+results_motifmatchr <- as.data.frame(results_motifmatchr)
+
+colnames(results_motifmatchr) <- motif_row_name
+
+results_motifmatchr[results_motifmatchr == TRUE] <- 1
+results_motifmatchr[results_motifmatchr == FALSE] <- 0
+
+results_motifmatchr <- results_motifmatchr[, intersect(colnames(results_motifmatchr), names(test_weight))]
+
+motif_weights <- rep(0, length(rownames(results_motifmatchr)))
+names(motif_weights) <- rownames(results_motifmatchr)
+
+results_motifmatchr <- as.matrix(results_motifmatchr)
+real_col_id <- colnames(results_motifmatchr)
+test_weight <- test_weight[real_col_id]
+
+for(i in 1:length(results_motifmatchr[, 1])) {
+  motif_weights[i] <- sum(results_motifmatchr[i, ] * test_weight)
+  
+  print(i)
+}
+
+hist(motif_weights)
+plot(1:length(motif_weights), sort(motif_weights))
+
+link_info_list$motif_weights <- motif_weights
+link_info_list$topic_updated <- 100 * scales::rescale(link_info_list$topic, to = c(0, 1)) * scales::rescale(link_info_list$motif_weights, to = c(0, 1))
+#link_info_list <- link_info_list %>% dplyr::group_by(component_stitching) %>% dplyr::mutate(topic_updated_summarized = sum(topic_updated))
+#rownames(link_info_list) <- link_info_list$peak_id
+
+# method
+# centrality : total summation of enhancer centrality within each component.
+# (100 * max-normalized weighted average centrality)-rank plot.
+# choose components (iSE) from this plot.
+topic_weight <- link_info_list[names(igraph::V(network_reg)), "topic_updated"]
+
+pagerank_topic <- igraph::page.rank(network_reg, directed = TRUE, personalized = topic_weight)
+pagerank_topic <- as.data.frame(pagerank_topic$vector)
+
+colnames(pagerank_topic) <- "topic_sensitive_pagerank"
+
+test_comp <- link_info_list
+test_comp$topic_sensitive_pagerank <- pagerank_topic[test_comp$peak_id, "topic_sensitive_pagerank"]
+
+#sum_topic <- sum(link_info_list$topic)
+#sum_motif <- sum(link_info_list$motif_weights)
+
+test_comp <- test_comp %>% dplyr::group_by(component_stitching) %>% dplyr::summarise(importance = sum(topic_sensitive_pagerank))
+test_comp$importance <- 100 * (test_comp$importance / max(test_comp$importance))
+test_comp <- test_comp %>% dplyr::arrange(importance)
+
+plot(1:nrow(test_comp), test_comp$importance, xlab = "rank", ylab = "summarized centrality")
+
+library(pathviewr)
+test <- test_comp
+test$component_stitching <- NULL
+colnames(test) <- "y"
+test$x <- 1:nrow(test_comp)
+test <- test[, c("x", "y")]
+
+# test 1
+#idx_elbow <- find_curve_elbow(test, plot_curve = TRUE)
+
+# test 2
+library(kneedle)
+idx_elbow <- kneedle(test$x, test$y, sensitivity = 3)
+idx_elbow <- idx_elbow[1]
+idx_elbow <- ceiling(idx_elbow)
+idx_ref <- 0.15 * nrow(test_comp)
+idx_ref <- floor(idx_ref)
+idx_ref <- nrow(test_comp) - idx_ref
+
+if(idx_elbow >= idx_ref) {
+  idx_elbow <- idx_elbow
+} else {
+  idx_elbow <- idx_ref
+}
+
+test_list <- subset(link_info_list, subset = component_stitching %in% test_comp$component_stitching[idx_elbow:nrow(test_comp)])
+test_list <- split(test_list, f = test_list$component_stitching)
+
+#test_act <- numeric()
+#for(i in 1:length(test_list)) {
+  #test_act <- c(test_act, test_list[[i]]$topic)
+#}
+
+extract_ranges_for_bed <- function(x) {
+  x$start <- as.integer(x$start)
+  x <- x %>% dplyr::arrange(start)
+  
+  idx_ab <- which(x$topic > 5.0)
+  
+  if(length(idx_ab) == 0) {
+    x <- data.frame(chr = NA, start = NA, end = NA)
+  } else {
+    x <- x[idx_ab, ]
+    x <- data.frame(chr = x$chr[1], start = x$start[1], end = x$end[nrow(x)])
+  }
+  
+  return(x)
+}
+
+for(i in 1:length(test_list)) {
+  test_list[[i]] <- extract_ranges_for_bed(test_list[[i]])
+  
+  print(i)
+}
+
+test_list <- do.call(rbind, test_list)
+test_list <- na.omit(test_list)
+write.table(test_list, "CRC_iSE_v3_0.92_c5.bed", sep = "\t", quote = FALSE, 
+            row.names = FALSE, col.names = FALSE)
+
+#
+test_list <- read.table("~/PSJ/test_PoiSE_CRC/test_TAM/test_filtered/CORE_potential_Mac_CRC_f.bed", sep = "\t", fill = TRUE)
+colnames(test_list) <- c("seqnames", "start", "end")
+# 
+
+gene_list <- c("TGFB1")
+p <- plotBrowserTrack(
+  ArchRProj = proj5, 
+  groupBy = "Clusters2", 
+  #useGroups = c("Mono"), 
+  geneSymbol = gene_list, 
+  upstream = 250000, 
+  downstream = 250000, 
+  features = makeGRangesFromDataFrame(test_list)
+)
+
+plot(p$TGFB1)
+
+plotPDF(plotList = p, 
+        name = "Plot-Tracks-VEGFA.pdf", 
+        ArchRProj = proj5, 
+        addDOC = FALSE, width = 10, height = 10)
+
+info_niTE <- link_info_list[, c("chr", "start", "end")]
+colnames(info_niTE) <- c("seqnames", "start", "end")
+
+info_niTE <- makeGRangesFromDataFrame(info_niTE)
+info_iSE <- makeGRangesFromDataFrame(test_list)
+
+info_niTE <- subsetByOverlaps(info_niTE, info_iSE, invert = TRUE)
+info_niTE <- as.data.frame(info_niTE)
+
+write.table(info_niTE[, c("seqnames", "start", "end")], "CRC_niTE_v3_0.92_c5.bed", sep = "\t", quote = FALSE, 
+            row.names = FALSE, col.names = FALSE)
+
+data_GWAS <- read.table("~/PSJ/test_PoiSE/GWAS/GWAS_IgA_Young.txt", sep = "\t", fill = TRUE)
+data_GWAS <- subset(data_GWAS, subset = V1 %in% c(paste0("chr", 1:22), "chrX"))
+
+pos_snp <- data_GWAS[, c(1:3)]
+colnames(pos_snp) <- c("seqnames", "start", "end")
+pos_snp$end <- pos_snp$end
+pos_snp <- makeGRangesFromDataFrame(pos_snp)
+
+snp_niTE <- subsetByOverlaps(pos_snp, info_niTE)
+
+# CD4 Tmem : The number of SNPs overlapped with niTE
+# asthma : 1
+# T1D : 0
+
+# B : The number of SNPs overlapped with niTE
+# SLE : 1
+# CLL : 0
+# IgA : 0

@@ -1,0 +1,104 @@
+---
+title: "introduction"
+author: "Seonjun Park"
+data: "2025-05-05"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE, 
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### Setup.
+
+```{r setup}
+library(enCORE)
+library(dplyr)
+library(dplyr)
+library(ArchR)
+library(parallel)
+library(motifmatchr)
+library(chromVARmotifs)
+library(BSgenome.Hsapiens.UCSC.hg38)
+setwd("~/PSJ/enCORE_dev")
+h5disableFileLocking()
+addArchRThreads(13)
+addArchRGenome("hg38")
+data("human_pwms_v2")
+```
+
+### Obtain co-accessibility information from ArchR object.
+
+```{r}
+proj4 <- readRDS("~/PSJ/test_enCORE/Save-Proj_r4/Save-ArchR-Project.rds")
+
+proj5 <- addCoAccessibility(
+  ArchRProj = proj4,
+  reducedDims = "IterativeLSI",
+  maxDist = 500000
+)
+
+cA <- getCoAccessibility(
+  ArchRProj = proj5,
+  corCutOff = 0.2,
+  resolution = 1,
+  returnLoops = FALSE
+)
+```
+
+### Add cluster information for performing enCORE.
+enCORE can only recognize the column metadata information called Clusters2.
+
+```{r}
+proj5$Clusters2 <- mapLabels(proj5$Sample, newLabels = remapClust, oldLabels = names(remapClust))
+```
+
+### Extract initial enhancer candidates.
+After running the following code, two required files were generated in output_dir.
+
+```{r}
+data_lump_enCORE <- Extract_initial_enhancer_candidates(proj_atac = proj5, data_coacc = cA, output_dir = "~/PSJ/test_enCORE", organism = "hg38")
+```
+
+### Calculate gABC scores.
+To perform the following code properly, .gtf file must be located in the previous output_dir (== "~/PSJ/test_enCORE"). After running the following code, gABC scores per cluster were generated in output_dir (== "~/PSJ/test_enCORE/results_gABC_cr_f").
+
+```{r}
+data_lump_enCORE <- Calculate_gABC_score(data_lump_enCORE = data_lump_enCORE, n_col = 5, STARE_dir = "~/anaconda3/bin", output_dir = "~/PSJ/test_enCORE/results_gABC_cr_f")
+```
+
+### Add TF motif information to ArchR object.
+Add CISBP motif and chromVAR deviation information to ArchR object.
+
+```{r}
+proj6 <- addMotifAnnotations(ArchRProj = proj5, motifPWMs = human_pwms_v2, name = "Motif")
+proj6 <- addBgdPeaks(proj6)
+proj6 <- addDeviationsMatrix(
+  ArchRProj = proj6,
+  peakAnnotation = "Motif",
+  force = TRUE,
+  threads = 10
+)
+```
+
+### Determine TF weight threshold.
+Default threshold is 0.675. If not, automatically determine TF weight threshold. If you want to use your own theshold, you should set use_default_thres = TRUE & predefined_thres = [your threshold].
+
+```{r}
+data_lump_enCORE <- Determine_TF_weight_threshold(proj_atac = proj6, data_lump_enCORE = data_lump_enCORE, list_cluster = c("CRC", "Normal"), use_default_thres = FALSE)
+```
+
+### Extract CORE.
+Write CORE regions into output_dir. If you use option = "potential", only raw CORE. However, if you use option = "active", you can obtain both regions, CORE from the potential (raw) option and the active (filtered) option.
+
+```{r}
+data_lump_enCORE <- Distill_CORE_per_cluster(proj_atac = proj6, data_lump_enCORE = data_lump_enCORE, output_dir = "~/PSJ/test_enCORE/test_filtered", option = "active")
+```

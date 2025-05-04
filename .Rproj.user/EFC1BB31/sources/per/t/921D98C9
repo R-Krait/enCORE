@@ -1,0 +1,26 @@
+{
+    "id": "921D98C9",
+    "path": "~/PSJ/test_PoiSE_CRC/test_CRC_for_loop.R",
+    "project_path": null,
+    "type": "r_source",
+    "hash": "2643585152",
+    "contents": "",
+    "dirty": false,
+    "created": 1746092155277.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "178,33",
+        "scrollLine": "166"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1746092112,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1746092112,
+    "read_only": false,
+    "read_only_alternatives": []
+}
