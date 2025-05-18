@@ -1,5 +1,5 @@
 <p align="center">
-<img width="250" src="src/Logo_enCORE.png">
+<img width="200" src="src/Logo_enCORE.png">
 </p>
 
 # enCORE
