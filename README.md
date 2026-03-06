@@ -5,14 +5,14 @@
 # enCORE
 **Enhancer-Enhancer Network-based Prediction of Clustered Open Regulatory Elements (CORE) using scATAC-seq data**
 
-### Overview
+## Overview
 enCORE is a computational framework for identifying highly interactive enhancer clusters from single-cell chromatin accessibility. enCORE uniquely defines such enhancer clusters as CORE (Clustered Open Regulatory Elements). enCORE operates solely on single-cell ATAC-seq data, without requiring single-cell RNA-seq or multimodal measurements (e.g., 10X Multiome RNA/ATAC).
 
 <p align="center">
 <img src="src/cover_image.png" width=90%>
 </p>
 
-### Installation of enCORE Package
+## Installation of enCORE Package
 You can install the development version of enCORE from [GitHub](https://github.com/) with:
 
 ``` r
@@ -20,7 +20,7 @@ You can install the development version of enCORE from [GitHub](https://github.c
 devtools::install_github("R-Krait/enCORE")
 ```
 
-### Requirements
+## Requirements
 The packages listed below are required dependencies for enCORE.
 
 - `ArchR (>= 1.0.2)`
@@ -59,7 +59,7 @@ Then, install STARE-ABC & BEDTools.
 mamba install -c conda-forge -c bioconda stare-abc bedtools
 ```
 
-### Example Usage
+## Example Usage
 Please refer to "vignettes/introduction.Rmd". The following parts should be modified to match your own dataset.
 
 1. `setwd("~/PSJ/enCORE_dev")`
@@ -96,7 +96,11 @@ Please refer to "vignettes/introduction.Rmd". The following parts should be modi
 
    Except for special cases, such as cell-to-cell heterogeneity is extremely low and the automatically calculated threshold becomes unusually low, we recommend using **all annotation labels**, as shown below.
 
-``` r
-list_group <- sort(unique(as.character(proj6$Clusters2)))
-data_lump_enCORE <- Determine_TF_weight_threshold(proj_atac = proj6, data_lump_enCORE = data_lump_enCORE, list_cluster = list_group, use_default_thres = FALSE)
-```
+   ``` r
+   list_group <- sort(unique(as.character(proj6$Clusters2)))
+   data_lump_enCORE <- Determine_TF_weight_threshold(proj_atac = proj6, data_lump_enCORE = data_lump_enCORE, list_cluster = list_group, use_default_thres = FALSE)
+   ```
+
+## Citing `enCORE`
+If you use enCORE in your research, please cite using:
+(...)
