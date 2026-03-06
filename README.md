@@ -23,7 +23,7 @@ devtools::install_github("R-Krait/enCORE")
 ### Requirements
 The packages listed below are required dependencies for enCORE.
 
-- `ArchR`
+- `ArchR (>= 1.0.2)`
 - `TxDb.Hsapiens.UCSC.hg38.knownGene`
 - `TxDb.Hsapiens.UCSC.hg19.knownGene`
 - `TxDb.Mmusculus.UCSC.mm10.knownGene`
