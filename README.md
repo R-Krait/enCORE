@@ -103,4 +103,5 @@ Please refer to `vignettes/introduction.Rmd`. The following parts should be modi
 
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
+
 (...)
