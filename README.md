@@ -21,4 +21,30 @@ devtools::install_github("R-Krait/enCORE")
 ```
 
 ### Requirements
-The packages below will...
+The packages listed below are required dependencies for enCORE.
+
+- `ArchR`
+- `TxDb.Hsapiens.UCSC.hg38.knownGene`
+- `TxDb.Hsapiens.UCSC.hg19.knownGene`
+- `TxDb.Mmusculus.UCSC.mm10.knownGene`
+- `org.Hs.eg.db`
+- `org.Mm.eg.db`
+- `GenomicRanges`
+- `GenomicFeatures`
+- `ChIPseeker`
+- `data.table`
+- `dplyr`
+- `reshape2`
+- `AnnotationDbi`
+- `progress`
+- `igraph`
+- `mefa4`
+- `parallel`
+- `stringr`
+- `coop`
+- `chromVARmotifs`
+- `motifmatchr`
+- `kneedle`
+- `scales`
+
+The enCORE package also requires command-line tools, STARE & BEDTools.
