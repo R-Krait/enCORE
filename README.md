@@ -84,7 +84,7 @@ Please refer to `vignettes/introduction.Rmd`. The following parts should be modi
 
 6. The `n_col` argument in `Calculate_gABC_score`
 
-   This argument has the same meaning as the `n_col` argument in STARE. It should be set to **[the number of annotation labels for which you want to extract CORE (e.g., the number of cell types) + 3].**
+   This argument has the same meaning as the `n_col` argument in STARE. It should be set to **[the number of annotation label classes in Clusters2 (e.g., the number of cell types) + 3].**
 
 7. The `motifPWMs` argument in `addMotifAnnotations`
 
