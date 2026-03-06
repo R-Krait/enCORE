@@ -69,5 +69,6 @@ Please refer to "vignettes/introduction.Rmd". The following parts should be modi
    The object must have been generated after IterativeLSI, peak calling, and iterative overlap peak
    merging have been completed.
 3. `proj5$Clusters2 <- mapLabels(proj5$Sample, newLabels = remapClust, oldLabels = names(remapClust))`
+
    Add the annotation labels for which you want to extract CORE, such as disease status or cell type,
    to the cell metadata under the name `Clusters2`.
