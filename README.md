@@ -63,11 +63,15 @@ mamba install -c conda-forge -c bioconda stare-abc bedtools
 Please refer to "vignettes/introduction.Rmd". The following parts should be modified to match your own dataset.
 
 1. `setwd("~/PSJ/enCORE_dev")`
+
    Replace this path with your own working directory.
+
 2. `proj4 <- readRDS("~/PSJ/test_enCORE/Save-Proj_r4/Save-ArchR-Project.rds")`
+
    Replace this with your own ArchR object saved in `.rds` format.
    The object must have been generated after IterativeLSI, peak calling, and iterative overlap peak
    merging have been completed.
+
 3. `proj5$Clusters2 <- mapLabels(proj5$Sample, newLabels = remapClust, oldLabels = names(remapClust))`
 
    Add the annotation labels for which you want to extract CORE, such as disease status or cell type,
