@@ -48,3 +48,16 @@ The packages listed below are required dependencies for enCORE.
 - `scales (>= 1.3.0)`
 
 The enCORE package also requires command-line tools, STARE & BEDTools.
+
+First, please install mamba as fast alternative to conda for package installation.
+```
+conda install conda-forge::mamba
+```
+
+Then, install STARE-ABC & BEDTools.
+```
+mamba install -c conda-forge -c bioconda stare-abc bedtools
+```
+
+### Example Usage
+(...)
