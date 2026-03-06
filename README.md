@@ -103,21 +103,4 @@ Please refer to "vignettes/introduction.Rmd". The following parts should be modi
 
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
-
-<!-- disableFinding(SNIPPET_INVALID_LANGUAGE) -->
-
-```bibtex
-@article{enCORE,
-  title={Deciphering context-dependent epigenetic program by network-based prediction of clustered open regulatory elements from single-cell chromatin accessibility},
-  author={Avsec, {\v Z}iga and Latysheva, Natasha and Cheng, Jun and Novati, Guido and Taylor, Kyle R. and Ward, Tom and Bycroft, Clare and Nicolaisen, Lauren and Arvaniti, Eirini and Pan, Joshua and Thomas, Raina and Dutordoir, Vincent and Perino, Matteo and De, Soham and Karollus, Alexander and Gayoso, Adam and Sargeant, Toby and Mottram, Anne and Wong, Lai Hong and Drot{\'a}r, Pavol and Kosiorek, Adam and Senior, Andrew and Tanburn, Richard and Applebaum, Taylor and Basu, Souradeep and Hassabis, Demis and Kohli, Pushmeet},
-  journal={Nature},
-  volume={649},
-  number={8099},
-  pages={1206--1218},
-  year={2026},
-  doi={10.1038/s41586-025-10014-0},
-  publisher={Nature Publishing Group UK London}
-}
-```
-
-<!-- enableFinding(SNIPPET_INVALID_LANGUAGE) -->
+(...)
