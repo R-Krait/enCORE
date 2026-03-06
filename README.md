@@ -60,7 +60,7 @@ mamba install -c conda-forge -c bioconda stare-abc bedtools
 ```
 
 ## Example Usage
-Please refer to "vignettes/introduction.Rmd". The following parts should be modified to match your own dataset.
+Please refer to `vignettes/introduction.Rmd`. The following parts should be modified to match your own dataset.
 
 1. `setwd("~/PSJ/enCORE_dev")`
 
