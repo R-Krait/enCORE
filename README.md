@@ -12,7 +12,7 @@ enCORE is a computational framework for identifying highly interactive enhancer 
 <img src="src/cover_image.png" width=90%>
 </p>
 
-## Installation of enCORE Package
+## Installation
 You can install the development version of enCORE from [GitHub](https://github.com/) with:
 
 ``` r
