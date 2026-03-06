@@ -68,7 +68,7 @@ Please refer to `vignettes/introduction.Rmd`. The following parts should be modi
 
 2. `proj4 <- readRDS("~/PSJ/test_enCORE/Save-Proj_r4/Save-ArchR-Project.rds")`
 
-   Replace this with your own ArchR object saved in `.rds` format. The object must have been generated after IterativeLSI, peak calling, and iterative overlap peak merging have been completed.
+   Replace this with your own ArchR object saved in `.rds` format. The object must have been generated after completing IterativeLSI, peak calling, and iterative overlap peak merging procedures.
 
 3. `proj5$Clusters2 <- mapLabels(proj5$Sample, newLabels = remapClust, oldLabels = names(remapClust))`
 
