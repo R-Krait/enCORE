@@ -1,5 +1,5 @@
 <p align="center">
-<img width="250" src="src/Logo_enCORE.png">
+<img width="250" src="figures/Logo_enCORE.png">
 </p>
 
 # enCORE
@@ -9,7 +9,7 @@
 enCORE is a computational framework for identifying highly interactive enhancer clusters from single-cell chromatin accessibility. enCORE uniquely defines such enhancer clusters as Clustered Open Regulatory Elements (CORE). enCORE operates solely on single-cell ATAC-seq data, without requiring matched single-cell RNA-seq data or multimodal measurements (e.g., 10X Multiome RNA/ATAC).
 
 <p align="center">
-<img src="src/cover_image.png" width=90%>
+<img src="figures/cover_image.png" width=90%>
 </p>
 
 ## Installation
