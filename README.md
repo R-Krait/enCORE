@@ -3,10 +3,10 @@
 </p>
 
 # enCORE
-**Enhancer-Enhancer Network-based Prediction of Clustered Open Regulatory Elements (CORE) using scATAC-seq data**
+**Enhancer-Enhancer Network-based Prediction of Clustered Open Regulatory Elements using scATAC-seq data**
 
 ## Overview
-enCORE is a computational framework for identifying highly interactive enhancer clusters from single-cell chromatin accessibility. enCORE uniquely defines such enhancer clusters as CORE (Clustered Open Regulatory Elements). enCORE operates solely on single-cell ATAC-seq data, without requiring matched single-cell RNA-seq data or multimodal measurements (e.g., 10X Multiome RNA/ATAC).
+enCORE is a computational framework for identifying highly interactive enhancer clusters from single-cell chromatin accessibility. enCORE uniquely defines such enhancer clusters as Clustered Open Regulatory Elements (CORE). enCORE operates solely on single-cell ATAC-seq data, without requiring matched single-cell RNA-seq data or multimodal measurements (e.g., 10X Multiome RNA/ATAC).
 
 <p align="center">
 <img src="src/cover_image.png" width=90%>
