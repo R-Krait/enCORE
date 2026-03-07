@@ -54,7 +54,7 @@ First, please install mamba as fast alternative to conda for package installatio
 conda install conda-forge::mamba
 ```
 
-Then, install STARE-ABC & BEDTools.
+Then, install STARE & BEDTools.
 ```
 mamba install -c conda-forge -c bioconda stare-abc bedtools
 ```
