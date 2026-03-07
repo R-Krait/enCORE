@@ -94,7 +94,7 @@ Please refer to `vignettes/introduction.Rmd`. The following parts should be modi
 
    Provide the annotation labels for which you want to extract CORE as a vector. You may use either all annotation labels (Clusters2) or only a subset of them.
 
-   Except for special cases, such as cell-to-cell heterogeneity is extremely low and the automatically calculated threshold becomes unusually low, we recommend using **all annotation labels**, as shown below.
+   Except for special cases, such as the automatically calculated threshold is very small (e.g., because of extremely low cell-to-cell heterogeneity), we recommend using **all annotation labels**, as shown below.
 
    ``` r
    list_group <- sort(unique(as.character(proj6$Clusters2)))
