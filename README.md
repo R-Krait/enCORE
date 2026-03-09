@@ -108,7 +108,10 @@ Please refer to `vignettes/introduction.Rmd`. The following parts should be modi
    data_lump_enCORE <- Determine_TF_weight_threshold(proj_atac = proj6, data_lump_enCORE = data_lump_enCORE, list_cluster = list_group, use_default_thres = FALSE)
    ```
 
-## Example Format
+## Demo : PBMC 3k
+(...)
+
+## Output Format
 (...)
 
 ## Citing `enCORE`
