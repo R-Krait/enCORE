@@ -109,7 +109,13 @@ Please refer to `vignettes/introduction.Rmd`. The following parts should be modi
    ```
 
 ## Demo: 10X PBMC 3k (hg38)
-(...)
+As a quick start example, you can run the 10X PBMC 3k demo dataset (example_demo.zip). [If you want to try it,] Use the following command to download the demo dataset:
+
+```
+wget -O https://figshare.com/ndownloader/articles/31577779
+```
+
+Furthermore, the output files for the demo dataset are also available (example_output.zip).
 
 ## Output Format
 (...)
