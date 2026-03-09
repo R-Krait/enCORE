@@ -59,6 +59,13 @@ Then, install STARE & BEDTools.
 mamba install -c conda-forge -c bioconda stare-abc bedtools
 ```
 
+Additionally, you should download .gtf files for enCORE STARE-gABC scoring.
+```
+wget -O https://figshare.com/ndownloader/articles/31567372
+```
+
+To execute enCORE, .gtf files should be located in your own working directory.
+
 ## Example Usage
 Please refer to `vignettes/introduction.Rmd`. The following parts should be modified to match your own dataset.
 
