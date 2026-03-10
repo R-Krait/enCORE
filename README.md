@@ -120,7 +120,7 @@ Furthermore, the output files for the demo dataset are also available (example_o
 ## Output Format
 1. `CORE_potential_[Clusters2]_f.bed`
 
-   BED3 file containing CORE profiles from [Clusters2] using the potential option.
+   BED3 file containing CORE profiles from [Clusters2] using the `potential` option.
 
 2. `total_enhc_[Clusters2].bed`
 
@@ -139,11 +139,23 @@ Information within `total_enhc_[Clusters2].csv`
 | chr          | The chromosome on which the peak region is located.   |
 | start        | The starting genomic coordinate of the peak region.          |
 | end          | The ending genomic coordinate of the peak region.                  |
-| difference   | A binary flag indicating the transition point of the initial decomposed component. (`1: transition point, 0: not changed`)              |
+| difference   | A binary flag indicating the transition point of the initial decomposed component (`1: transition point, 0: not changed`).              |
 | midpoint     | The midpoint of the peak region. |
 | dist_diff    | The genomic distance to the immediately subsequent peak on the same chromosome.              |
-| component_stitching   | The final component after several processing step. (`enhancer clusters`) |
+| component_stitching   | The final component after several processing step (`enhancer clusters`). |
 | topic        | The normalized accessibility within the peak region.              |
+
+If you the `active` option, 
+1. `CORE_active_[Clusters2]_f.bed`
+   
+   BED3 file containing CORE profiles from [Clusters2] using the `active` option (2/2 step of `Iterative proximal enhancer clusters filtering`).
+
+2. `CORE_active_[Clusters2]_initial.bed`
+
+   BED3 file containing initial CORE profiles from [Clusters2] using the `active` option (1/2 step of `Iterative proximal enhancer clusters filtering`).
+
+3. `enhc_inactive_[Clusters2].bed`
+
 
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
