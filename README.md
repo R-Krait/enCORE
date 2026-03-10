@@ -115,7 +115,9 @@ As a quick start example, you can run the 10X PBMC 3k demo dataset (example_demo
 wget -O https://figshare.com/ndownloader/articles/31577779
 ```
 
-Furthermore, the output files for the demo dataset are also available (example_output.zip).
+<br/>
+
+Output files for the demo dataset are also available (example_output.zip). Also, you can download the results of rGREAT peak annotation for CORE from the `active` option (results_core_annotation_PBMC_3k.csv).
 
 ## Output Format
 1. `CORE_potential_[Clusters2]_f.bed`
