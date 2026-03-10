@@ -145,6 +145,7 @@ Information within `total_enhc_[Clusters2].csv`
 | component_stitching   | The final component after several processing step (`enhancer clusters`). |
 | topic        | The normalized accessibility within the peak region.              |
 
+
 If you the `active` option, 
 1. `CORE_active_[Clusters2]_f.bed`
    
