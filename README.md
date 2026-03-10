@@ -145,18 +145,18 @@ Information within `total_enhc_[Clusters2].csv`
 | component_stitching   | The final component after several processing step (`enhancer clusters`). |
 | topic        | The normalized accessibility within the peak region.              |
 
-
-If you the `active` option, 
-1. `CORE_active_[Clusters2]_f.bed`
+If you had applied the `active` option, 
+4. `CORE_active_[Clusters2]_f.bed`
    
-   BED3 file containing CORE profiles from [Clusters2] using the `active` option (2/2 step of `Iterative proximal enhancer clusters filtering`).
+   BED3 file containing CORE profiles from [Clusters2] using the `active` option (2/2 iteration of `Iterative proximal enhancer clusters filtering`).
 
-2. `CORE_active_[Clusters2]_initial.bed`
+5. `CORE_active_[Clusters2]_initial.bed`
 
-   BED3 file containing initial CORE profiles from [Clusters2] using the `active` option (1/2 step of `Iterative proximal enhancer clusters filtering`).
+   BED3 file containing initial CORE profiles from [Clusters2] using the `active` option (1/2 iteration of `Iterative proximal enhancer clusters filtering`).
 
-3. `enhc_inactive_[Clusters2].bed`
+6. `enhc_inactive_[Clusters2].bed`
 
+   BED3 file containing inactive proximal enhancer regions.
 
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
