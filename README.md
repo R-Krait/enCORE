@@ -128,6 +128,23 @@ Furthermore, the output files for the demo dataset are also available (example_o
 
 3. `total_enhc_[Clusters2].csv`
 
+   CSV file containing total enhancer candidates with metadata.
+
+Information within `total_enhc_[Clusters2].csv`
+
+| Column       | Descriptions                                                 |
+| ------------ | ------------------------------------------------------------ |
+| component    | The initial decomposed component from enhancer candidates                 |
+| peak_id      | The unique identifier for each peak (enhancer candidate), formatted as [chr]_[start]_[end]                 |
+| chr          | The chromosome on which the peak region is located   |
+| start        | The starting genomic coordinate of the peak region          |
+| end          | The ending genomic coordinate of the peak region                  |
+| difference   | A binary flag indicating the transition point of the initial decomposed component              |
+| midpoint     | The  |
+| dist_diff    | The               |
+| component_stitching   | The  |
+| topic        | The               |
+
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
 
