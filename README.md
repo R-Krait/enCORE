@@ -134,12 +134,12 @@ Information within `total_enhc_[Clusters2].csv`
 
 | Column       | Descriptions                                                 |
 | ------------ | ------------------------------------------------------------ |
-| component    | The initial decomposed component from enhancer candidates                 |
-| peak_id      | The unique identifier for each peak (enhancer candidate), formatted as `[chr]_[start]_[end]`                 |
-| chr          | The chromosome on which the peak region is located   |
-| start        | The starting genomic coordinate of the peak region          |
-| end          | The ending genomic coordinate of the peak region                  |
-| difference   | A binary flag indicating the transition point of the initial decomposed component   (`1: transition point, 0: not changed`)              |
+| component    | The initial decomposed component from enhancer candidates.                 |
+| peak_id      | The unique identifier for each peak (enhancer candidate), formatted as `[chr]_[start]_[end]`.                 |
+| chr          | The chromosome on which the peak region is located.   |
+| start        | The starting genomic coordinate of the peak region.          |
+| end          | The ending genomic coordinate of the peak region.                  |
+| difference   | A binary flag indicating the transition point of the initial decomposed component. `1: transition point, 0: not changed`              |
 | midpoint     | The  |
 | dist_diff    | The               |
 | component_stitching   | The  |
