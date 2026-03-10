@@ -118,7 +118,15 @@ wget -O https://figshare.com/ndownloader/articles/31577779
 Furthermore, the output files for the demo dataset are also available (example_output.zip).
 
 ## Output Format
-(...)
+1. `CORE_potential_[Clusters2]_f.bed`
+
+   BED3 file containing CORE profiles from [Clusters2] using the potential option.
+
+2. `total_enhc_[Clusters2].bed`
+
+   BED3 file containing total enhancer candidates from [Clusters2].
+
+3. `total_enhc_[Clusters2].csv`
 
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
