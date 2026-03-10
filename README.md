@@ -146,6 +146,7 @@ Information within `total_enhc_[Clusters2].csv`
 | topic        | The normalized accessibility within the peak region.              |
 
 If you had applied the `active` option, 
+
 4. `CORE_active_[Clusters2]_f.bed`
    
    BED3 file containing CORE profiles from [Clusters2] using the `active` option (2/2 iteration of `Iterative proximal enhancer clusters filtering`).
