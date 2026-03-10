@@ -139,11 +139,11 @@ Information within `total_enhc_[Clusters2].csv`
 | chr          | The chromosome on which the peak region is located.   |
 | start        | The starting genomic coordinate of the peak region.          |
 | end          | The ending genomic coordinate of the peak region.                  |
-| difference   | A binary flag indicating the transition point of the initial decomposed component. Value: `1: transition point, 0: not changed`              |
-| midpoint     | The  |
-| dist_diff    | The               |
+| difference   | A binary flag indicating the transition point of the initial decomposed component. (`1: transition point, 0: not changed`)              |
+| midpoint     | The midpoint of the peak region. |
+| dist_diff    | The genomic distance to the immediately subsequent peak on the same chromosome.              |
 | component_stitching   | The  |
-| topic        | The               |
+| topic        | The normalized peak accessibility.              |
 
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
