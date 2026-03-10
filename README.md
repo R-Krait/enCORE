@@ -161,6 +161,9 @@ If you had applied the `active` option,
 
    BED3 file containing inactive proximal enhancer regions.
 
+To perform downstream analysis with CORE, 
+Please use `CORE_active_[Clusters2]_f.bed` (`active` option) or `CORE_potential_[Clusters2]_f.bed` (`potential` option). These are the final results for each option.
+
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
 
