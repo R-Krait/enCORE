@@ -142,8 +142,8 @@ Information within `total_enhc_[Clusters2].csv`
 | difference   | A binary flag indicating the transition point of the initial decomposed component. (`1: transition point, 0: not changed`)              |
 | midpoint     | The midpoint of the peak region. |
 | dist_diff    | The genomic distance to the immediately subsequent peak on the same chromosome.              |
-| component_stitching   | The  |
-| topic        | The normalized peak accessibility.              |
+| component_stitching   | The final component after several processing step. (`enhancer clusters`) |
+| topic        | The normalized accessibility within the peak region.              |
 
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
