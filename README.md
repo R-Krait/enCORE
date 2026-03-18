@@ -172,4 +172,16 @@ Please use `CORE_active_[Clusters2]_f.bed` (`active` option) or `CORE_potential_
 ## Citing `enCORE`
 If you use enCORE in your research, please cite using:
 
-(...)
+```bibtex
+@article {Park2026.03.17.712366,
+	author = {Park, Seonjun and Ma, Sungkook and Lee, Wonhyo and Park, Sung Ho},
+	title = {Deciphering context-dependent epigenetic program by network-based prediction of clustered open regulatory elements from single-cell chromatin accessibility},
+	elocation-id = {2026.03.17.712366},
+	year = {2026},
+	doi = {10.64898/2026.03.17.712366},
+	publisher = {Cold Spring Harbor Laboratory},
+	URL = {https://www.biorxiv.org/content/early/2026/03/18/2026.03.17.712366},
+	eprint = {https://www.biorxiv.org/content/early/2026/03/18/2026.03.17.712366.full.pdf},
+	journal = {bioRxiv}
+}
+```
