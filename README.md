@@ -61,7 +61,7 @@ mamba install -c conda-forge -c bioconda stare-abc bedtools
 
 Additionally, you should download .gtf files for enCORE STARE-gABC scoring.
 ```
-wget -O https://figshare.com/ndownloader/articles/31567372
+Please download them from https://figshare.com/articles/dataset/GTF_files_for_enCORE_STARE-gABC_scoring/31567372
 ```
 
 To execute enCORE, .gtf files should be located in your own working directory.
@@ -112,7 +112,7 @@ Please refer to `vignettes/introduction.Rmd`. The following parts should be modi
 As a quick start example, you can run the 10X PBMC 3k demo dataset (example_demo.zip). **[If you want to try it, ]** Use the following command to download the demo dataset:
 
 ```
-wget -O https://figshare.com/ndownloader/articles/31577779
+Please download it from https://figshare.com/articles/dataset/Demo_PBMC_3k_enCORE_/31577779
 ```
 
 Output files for the demo dataset are also available (example_output.zip). 
