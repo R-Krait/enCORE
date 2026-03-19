@@ -128,25 +128,6 @@ Also, you can download the results of rGREAT peak annotation for CORE from the `
 
    BED3 file containing total enhancer candidates from [Clusters2].
 
-3. `total_enhc_[Clusters2].csv`
-
-   CSV file containing total enhancer candidates with metadata.
-
-Information within `total_enhc_[Clusters2].csv`
-
-| Column       | Descriptions                                                 |
-| ------------ | ------------------------------------------------------------ |
-| component    | The initial decomposed component from enhancer candidates.                 |
-| peak_id      | The unique identifier for each peak (enhancer candidate), formatted as `[chr]_[start]_[end]`.                 |
-| chr          | The chromosome on which the peak region is located.   |
-| start        | The starting genomic coordinate of the peak region.          |
-| end          | The ending genomic coordinate of the peak region.                  |
-| difference   | A binary flag indicating the transition point of the initial decomposed component (`1: transition point, 0: not changed`).              |
-| midpoint     | The midpoint of the peak region. |
-| dist_diff    | The genomic distance to the immediately subsequent peak on the same chromosome.              |
-| component_stitching   | The final component after several processing step (`enhancer clusters`). |
-| topic        | The normalized accessibility within the peak region.              |
-
 <br/>
 
 If you had applied the `active` option, 
