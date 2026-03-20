@@ -161,8 +161,8 @@ If you use enCORE in your research, please cite using:
 	year = {2026},
 	doi = {10.64898/2026.03.17.712366},
 	publisher = {Cold Spring Harbor Laboratory},
-	URL = {https://www.biorxiv.org/content/early/2026/03/18/2026.03.17.712366},
-	eprint = {https://www.biorxiv.org/content/early/2026/03/18/2026.03.17.712366.full.pdf},
+	URL = {https://www.biorxiv.org/content/early/2026/03/19/2026.03.17.712366},
+	eprint = {https://www.biorxiv.org/content/early/2026/03/19/2026.03.17.712366.full.pdf},
 	journal = {bioRxiv}
 }
 ```
